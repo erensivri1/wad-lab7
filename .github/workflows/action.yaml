@@ -1,0 +1,39 @@
+name: Lab 7
+
+on:
+  push:
+    branches:
+      - test
+  pull_request:
+    branches:
+      - test
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+          cache: gradle
+
+      - name: Grant execute permission for Gradle Wrapper
+        run: chmod +x gradlew
+
+      - name: Build with Gradle
+        run: ./gradlew build
+
+      # TODO: Run backend tests in the pipeline
+      # TODO: Set GitHub secrets and read them in the pipeline (for the environmentTest)
+      - name: Run Backend Tests with Secrets
+        run: ./gradlew test
+        env:
+          MY_SECRET_KEY: ${{ secrets.MY_SECRET_KEY }}
+
+      # TODO: Run the Jacoco report in the pipeline (Jacoco already exists)
+      - name: Generate JaCoCo Coverage Report
+        run: ./gradlew jacocoTestReport

@@ -24,16 +24,14 @@ jobs:
       - name: Grant execute permission for Gradle Wrapper
         run: chmod +x gradlew
 
+      # Ufak dokunuş burada: "-x test" ekleyerek build sırasında testleri atlıyoruz
       - name: Build with Gradle
-        run: ./gradlew build
+        run: ./gradlew build -x test
 
-      # TODO: Run backend tests in the pipeline
-      # TODO: Set GitHub secrets and read them in the pipeline (for the environmentTest)
       - name: Run Backend Tests with Secrets
         run: ./gradlew test
         env:
           MY_SECRET_KEY: ${{ secrets.MY_SECRET_KEY }}
 
-      # TODO: Run the Jacoco report in the pipeline (Jacoco already exists)
       - name: Generate JaCoCo Coverage Report
         run: ./gradlew jacocoTestReport
